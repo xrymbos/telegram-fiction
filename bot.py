@@ -32,7 +32,20 @@ def sendScrollback(chat_id):
     print("replying")
     client.getPage(url).addCallback(handleScrollbackResponse)
 
+def handleTextResponse(text):
+    print("finished sending text!")
+    print(text)
+
+def sendText(chat_id, text):
+    params = { 'parse_mode' : 'Markdown', 'chat_id' : chat_id, 'text' : text }
+    param_string = urllib.urlencode(params)
+    url = "https://api.telegram.org/bot{0}/sendMessage?{1}".format(token, param_string)
+    client.getPage(url).addCallback(handleTextResponse)
+
 def reply(chat_id, message):
+    if message.startswith('/start'):
+        sendText(chat_id, "Hello! Welcome to Counterfeit Monkey! See the story so far by typing /scrollback, or try entering a command such as \'look\'.")
+        return;
     if message.startswith('/scrollback'):
         sendScrollback(chat_id)
         return;
@@ -58,6 +71,8 @@ def getMessageId(message):
 def handleUpdate(results, offset):
     print("finished polling.")
     parsed_results = json.loads(results) 
+    if not 'ok' in parsed_results:
+        return
     if not parsed_results['ok']:
         print("error: {0}".format(results))
         return
