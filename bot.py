@@ -8,14 +8,32 @@ import bash
 
 token = "173353654:AAG3Xxh92Aei4IP5ofTLohZitLFk4qv08YM"
 
+scrollback = []
+
 shell = bash.Shell()
-shell.readUntilBlocking()
+scrollback.append(("_The Story So Far_", shell.readUntilBlocking()))
 
 def handleMessageResponse(results):
     print("finished replying!")
     print(results)
 
+def handleScrollbackResponse(results):
+    print("finished sending scrollback!")
+    print(results)
+
+def sendScrollback(chat_id):
+    for message, response in scrollback:
+        
+    params = { 'parse_mode' : 'Markdown', 'chat_id' : chat_id, 'text' : message }
+    param_string = urllib.urlencode(params)
+    url = "https://api.telegram.org/bot{0}/sendMessage?{1}".format(token, param_string)
+    print("replying")
+    client.getPage(url).addCallback(handleScrollbackResponse)
+
 def reply(chat_id, message):
+    if message.startswith('/scrollback'):
+        sendScrollback(chat_id)
+        return;
     print("running command...");
     shell.runCommand(message)
     print("ran command, reading result...");
@@ -26,6 +44,7 @@ def reply(chat_id, message):
     url = "https://api.telegram.org/bot{0}/sendMessage?{1}".format(token, param_string)
     print("replying")
     client.getPage(url).addCallback(handleMessageResponse)
+    scrollback.append((message, response))
     
 def getMessageId(message):
     if not 'chat' in message:
