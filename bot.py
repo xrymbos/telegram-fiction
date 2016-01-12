@@ -21,13 +21,7 @@ def reply(chat_id, message):
     client.getPage(url).addCallback(handleMessageResponse)
     reactor.run()
     
-while True:
-    print("polling...")
-    params = { 'timeout' : 1000, 'offset' : offset }
-    param_string = urllib.urlencode(params)
-    url = "https://api.telegram.org/bot{0}/getUpdates?{1}".format(token, param_string)
-    results = urllib2.urlopen(url).read()
-    print(url)
+def handleUpdate(results):
     print("finished polling.")
     parsed_results = json.loads(results) 
     if not parsed_results['ok']:
@@ -45,3 +39,15 @@ while True:
             continue
         if result['update_id'] >= offset:
             offset = result['update_id'] + 1
+    
+def checkForUpdates:
+    print("polling...")
+    params = { 'timeout' : 1000, 'offset' : offset }
+    param_string = urllib.urlencode(params)
+    url = "https://api.telegram.org/bot{0}/getUpdates?{1}".format(token, param_string)
+    print(url)
+    results = urllib2.urlopen(url).read()
+    client.getPage(url).addCallback(handleUpdate)
+
+checkForUpdates()
+reactor.run()
