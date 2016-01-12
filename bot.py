@@ -44,7 +44,7 @@ def reply(chat_id, message):
     params = { 'chat_id' : chat_id, 'text' : response }
     param_string = urllib.urlencode(params)
     url = "https://api.telegram.org/bot{0}/sendMessage?{1}".format(token, param_string)
-    print("replying")
+    print(url)
     client.getPage(url).addCallback(handleMessageResponse)
     scrollback.append((message, response))
     
