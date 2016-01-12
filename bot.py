@@ -19,6 +19,13 @@ def reply(chat_id, message):
     print("replying")
     client.getPage(url).addCallback(handleMessageResponse)
     
+def getMessageId(message):
+    if not 'chat' in message:
+        return 0
+    if not 'id' in message['chat']:
+        return 0
+    return message['chat']['id']
+
 def handleUpdate(results, offset):
     print("finished polling.")
     parsed_results = json.loads(results) 
@@ -34,7 +41,7 @@ def handleUpdate(results, offset):
             continue
         text = message['text']
         print(text)
-        reply(82066642, text)
+        reply(getMessageId(message), text)
         print("done replying")
         if not 'update_id' in result:
             print("continuing")
