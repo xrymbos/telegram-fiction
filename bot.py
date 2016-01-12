@@ -4,16 +4,24 @@ import urllib2
 import json
 from twisted.web import client
 from twisted.internet import reactor, defer
+import bash
 
 token = "173353654:AAG3Xxh92Aei4IP5ofTLohZitLFk4qv08YM"
+
+shell = bash.Shell()
+shell.readUntilBlocking()
 
 def handleMessageResponse(results):
     print("finished replying!")
     print(results)
 
 def reply(chat_id, message):
-    result = str(commands.getstatusoutput(message))
-    params = { 'chat_id' : chat_id, 'text' : result }
+    print("running command...");
+    shell.runCommand(message)
+    print("ran command, reading result...");
+    response = shell.readUntilBlocking()
+    print("got response from shell!");
+    params = { 'chat_id' : chat_id, 'text' : response }
     param_string = urllib.urlencode(params)
     url = "https://api.telegram.org/bot{0}/sendMessage?{1}".format(token, param_string)
     print("replying")

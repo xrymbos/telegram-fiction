@@ -17,9 +17,9 @@ class Shell:
         return result
 
     def runCommand(self, command):
-        self.process.stdin.write(command)
+        self.process.stdin.write(command + "\n")
 
-shell = Shell()
-print(shell.readUntilBlocking())
-shell.runCommand("yes\n")
-print(shell.readUntilBlocking())
+#shell = Shell()
+#print(shell.readUntilBlocking())
+#shell.runCommand("yes\n")
+#print(shell.readUntilBlocking())
