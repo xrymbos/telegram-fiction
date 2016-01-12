@@ -18,6 +18,8 @@ def reply(chat_id, message):
     param_string = urllib.urlencode(params)
     url = "https://api.telegram.org/bot{0}/sendMessage?{1}".format(token, param_string)
     print("replying")
+    client.getPage(url).addCallback(handleMessageResponse)
+    reactor.run()
     
 while True:
     print("polling...")
