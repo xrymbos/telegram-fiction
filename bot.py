@@ -22,9 +22,11 @@ def handleScrollbackResponse(results):
     print(results)
 
 def sendScrollback(chat_id):
+    backlog = ""
     for message, response in scrollback:
-        
-    params = { 'parse_mode' : 'Markdown', 'chat_id' : chat_id, 'text' : message }
+        boldMessage = "*{0}*".format(message)
+        backlog += boldMessage + "\n" + response
+    params = { 'parse_mode' : 'Markdown', 'chat_id' : chat_id, 'text' : backlog }
     param_string = urllib.urlencode(params)
     url = "https://api.telegram.org/bot{0}/sendMessage?{1}".format(token, param_string)
     print("replying")
